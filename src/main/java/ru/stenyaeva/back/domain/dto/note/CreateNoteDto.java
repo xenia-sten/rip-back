@@ -9,10 +9,14 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CreateNoteDto {
-    private String name;
+    private String title;
+    private String content;
+    private Long folder_id;
 
     @JsonCreator
-    public CreateNoteDto(@JsonProperty("name") String name){
-        this.name = name;
+    public CreateNoteDto(@JsonProperty("title") String title, @JsonProperty("content") String content, @JsonProperty("folder_id") Long folder_id){
+        this.title = title;
+        this.content = content;
+        this.folder_id = folder_id;
     }
 }

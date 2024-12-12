@@ -8,20 +8,29 @@ import lombok.Setter;
 import org.springframework.web.bind.annotation.GetMapping;
 import ru.stenyaeva.back.model.note.Note;
 
+import java.util.Base64;
+
 @Getter
 public class NoteDto {
     private Long id;
-    private String name;
+    private String title;
+    private String content;
+    private Long folder_id;
 
     @JsonCreator
     public NoteDto(@JsonProperty("id") Long id,
-                   @JsonProperty("name") String name) {
+                   @JsonProperty("title") String title,
+                   @JsonProperty("content") String content,
+                   @JsonProperty("folder_id") Long folder_id) {
         this.id = id;
-        this.name = name;
+        this.title = title;
+        this.content = content;
+        this.folder_id = folder_id;
     }
 
     public NoteDto(Note note){
         this.id = note.getId();
-        this.name = note.getName();
+        this.title = note.getTitle();
+        this.content = note.getContent();
     }
 }

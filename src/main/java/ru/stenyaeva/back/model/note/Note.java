@@ -9,6 +9,8 @@ import ru.stenyaeva.back.domain.dto.note.CreateNoteDto;
 import ru.stenyaeva.back.domain.dto.note.NoteDto;
 import ru.stenyaeva.back.model.user.User;
 
+import java.util.Base64;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -20,21 +22,27 @@ public class Note {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "title")
+    private String title;
 
-    @JoinColumn(name = "owner_id")
+    @Column(name = "content", columnDefinition = "TEXT")
+    private String content;
+
+    @JoinColumn(name = "folder_id")
     @ManyToOne
-    private User owner;
+    private Folder folder;
 
-    public Note(NoteDto dto, User owner){
-        this.id = dto.getId();
-        this.name = dto.getName();
-        this.owner = owner;
-    }
 
-    public Note(CreateNoteDto dto, User owner){
-        this.name = dto.getName();
-        this.owner = owner;
+//    public Note(NoteDto dto, Folder folder){
+//        this.id = dto.getId();
+//        this.title = dto.getTitle();
+//        this.content = dto.getContent() != null ? Base64.getDecoder().decode(dto.getContent()) : new byte[0];
+//        this.folder = folder;
+//    }
+
+    public Note(CreateNoteDto dto, Folder folder){
+        this.title = dto.getTitle();
+        this.content = dto.getContent() != null ? dto.getContent() : "";
+        this.folder = folder;
     }
 }

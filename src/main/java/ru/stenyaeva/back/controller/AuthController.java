@@ -31,6 +31,7 @@ import static org.springframework.security.web.context.HttpSessionSecurityContex
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
+@CrossOrigin(maxAge = 3600L, methods = {RequestMethod.POST})
 public class AuthController {
     private final UserDetailsServiceImpl userDetailsServiceImpl;
     private final UserRegistrationValidator userRegistrationValidator;
@@ -67,9 +68,16 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public void login(@RequestBody AuthDto dto, HttpServletRequest request){
+    public String login(@RequestBody AuthDto dto, HttpServletRequest request, HttpServletResponse response){
         Authentication authentication = authenticationManager.authenticate(new UserAuthentication(dto));
         createSession(authentication.getName(), request, authentication);
+        Cookie cookie = new Cookie("domain","none");
+        cookie.setDomain("");
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setAttribute("SameSite","None");
+        response.addCookie(cookie);
+        return "success";
     }
 
     private void createSession(String username,
