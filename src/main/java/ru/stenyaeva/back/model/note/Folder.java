@@ -34,6 +34,13 @@ public class Folder {
     @JoinColumn(name = "parent_id")
     private Folder parent;  // Ссылка на родительскую папку
 
+//    public Folder(FolderDto dto, User owner){
+//        this.id = dto.getId();
+//        this.name = dto.getName();
+//        this.owner = owner;
+//        this.parent = folder dto.getParentId()
+//    }
+
     public Folder (CreateFolderDto dto, User owner, Folder parent){
         this.name = dto.getName();
         this.parent = parent;

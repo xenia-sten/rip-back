@@ -71,12 +71,6 @@ public class AuthController {
     public String login(@RequestBody AuthDto dto, HttpServletRequest request, HttpServletResponse response){
         Authentication authentication = authenticationManager.authenticate(new UserAuthentication(dto));
         createSession(authentication.getName(), request, authentication);
-        Cookie cookie = new Cookie("domain","none");
-        cookie.setDomain("");
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-        cookie.setAttribute("SameSite","None");
-        response.addCookie(cookie);
         return "success";
     }
 

@@ -22,8 +22,8 @@ public class FolderController {
 
     @GetMapping
     public List<FolderDto> getAll(){
-        return List.of(new FolderDto(1L,"",1L));
-        //return folderService.getAllByOwner(securityUtils.getUser()).stream().map(FolderDto::new).toList();
+        //return List.of(new FolderDto(1L,"",1L));
+        return folderService.getAllByOwner(securityUtils.getUser()).stream().map(FolderDto::new).toList();
     }
     @GetMapping("/{id}")
     public List<FolderDto> getAllByParent(@PathVariable("id") Long id){
@@ -40,8 +40,8 @@ public class FolderController {
     }
 
     @PatchMapping
-    public FolderDto updateFolder(@RequestBody CreateFolderDto dto){
-        Folder folder = new Folder(dto, securityUtils.getUser(),
+    public FolderDto updateFolder(@RequestBody CreateFolderDto dto, @RequestParam("id") Long id){
+        Folder folder = new Folder(id, dto.getName(), securityUtils.getUser(),
                 dto.getParent_id() == null ? null : folderService.getById(dto.getParent_id()));
         return new FolderDto(folderService.save(folder));
     }

@@ -29,13 +29,12 @@ public class NoteController {
     @PostMapping("/notes")
     public NoteDto createNote(@RequestBody CreateNoteDto dto){
         Note note = new Note(dto, folderService.getById(dto.getFolder_id()));
-        System.out.println("Note = " + note);
         return new NoteDto(noteService.save(note));
     }
 
     @PatchMapping("/notes")
-    public NoteDto updateNote(@RequestBody CreateNoteDto dto){
-        Note note = new Note(dto, folderService.getById(dto.getFolder_id()));
+    public NoteDto updateNote(@RequestBody CreateNoteDto dto, @RequestParam("id") Long id){
+        Note note = new Note(id, dto.getTitle(), dto.getContent(), folderService.getById(dto.getFolder_id()));
         return new NoteDto(noteService.save(note));
     }
 

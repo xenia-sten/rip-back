@@ -32,5 +32,6 @@ public class NoteDto {
         this.id = note.getId();
         this.title = note.getTitle();
         this.content = note.getContent();
+        this.folder_id = note.getFolder().getId();
     }
 }
