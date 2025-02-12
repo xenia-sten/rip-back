@@ -34,16 +34,16 @@ public class UserSeeder implements CommandLineRunner {
 //        Note note4 = new Note(null, "note4",kseniya);
 //        noteRepository.saveAll(List.of(note1, note2, note3, note4));
 
-        Folder folder1 = new Folder(null, "folder1", kseniya, null);
-        Folder folder2 = new Folder(null, "folder2", kseniya, null);
-        Folder folder3 = new Folder(null, "folder3", kseniya, null);
+        Folder folder1 = new Folder(null, "Общее", kseniya, null);
+        Folder folder2 = new Folder(null, "Работа", kseniya, null);
+        Folder folder3 = new Folder(null, "Учеба", kseniya, null);
 //        Folder folder2 = new Folder(null, "folder2", kseniya, folder1,null);
         folderRepository.saveAll(List.of(folder1, folder2, folder3));
 //        folder1.setParent(folder2);
 //        folder3.setParent(folder2);
 //        folderRepository.save(folder1);
 //        folderRepository.save(folder3);
-        CreateNoteDto dto = new CreateNoteDto("title", "UEsDBAoAAAAAABxJjFkyzPruGAAAABgAAAAHAAAAbm90ZS5tZFBHZ3hQazE1SUU1dmRHVThMMmd4UGc9PVBLAQIUAAoAAAAAABxJjFkyzPruGAAAABgAAAAHAAAAAAAAAAAAAAAAAAAAAABub3RlLm1kUEsFBgAAAAABAAEANQAAAD0AAAAAAA==", folder1.getId());
+        CreateNoteDto dto = new CreateNoteDto("Конспект", "UEsDBAoAAAAAABxJjFkyzPruGAAAABgAAAAHAAAAbm90ZS5tZFBHZ3hQazE1SUU1dmRHVThMMmd4UGc9PVBLAQIUAAoAAAAAABxJjFkyzPruGAAAABgAAAAHAAAAAAAAAAAAAAAAAAAAAABub3RlLm1kUEsFBgAAAAABAAEANQAAAD0AAAAAAA==", folder1.getId());
         Note note = new Note(dto, folder1);
         noteRepository.save(note);
     }

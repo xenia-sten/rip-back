@@ -38,6 +38,12 @@ public class AuthController {
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
 
+
+    @GetMapping("/isAuthenticated")
+    public Map<String, Boolean> isAuthenticated(){
+        return Map.of("isAuthenticated",SecurityContextHolder.getContext().getAuthentication() instanceof UserAuthentication);
+    }
+
     @PostMapping("/logout")
     public void logout(HttpSession httpSession, HttpServletRequest httpRequest, HttpServletResponse response){
         try{

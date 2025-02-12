@@ -29,7 +29,7 @@ public class NoteController {
     @PostMapping("/notes")
     public NoteDto createNote(@RequestBody CreateNoteDto dto){
         Note note = new Note(dto, folderService.getById(dto.getFolder_id()));
-        return new NoteDto(noteService.save(note));
+            return new NoteDto(noteService.save(note));
     }
 
     @PatchMapping("/notes")
