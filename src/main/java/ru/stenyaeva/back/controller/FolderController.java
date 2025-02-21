@@ -25,6 +25,12 @@ public class FolderController {
         //return List.of(new FolderDto(1L,"",1L));
         return folderService.getAllByOwner(securityUtils.getUser()).stream().map(FolderDto::new).toList();
     }
+
+    @GetMapping("/parentFolders")
+    public List<FolderDto> getAllParentFolders(){
+        return folderService.getParentFolders(securityUtils.getUser()).stream().map(FolderDto::new).toList();
+    }
+
     @GetMapping("/{id}")
     public List<FolderDto> getAllByParent(@PathVariable("id") Long id){
         return folderService.getAllByParent(folderService.getById(id)).stream().map(FolderDto::new).toList();

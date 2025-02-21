@@ -2,6 +2,7 @@ package ru.stenyaeva.back.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.stenyaeva.back.model.note.Folder;
 import ru.stenyaeva.back.model.user.User;
 import ru.stenyaeva.back.repository.FolderRepository;
@@ -21,6 +22,12 @@ public class FolderServiceImpl implements FolderService {
     @Override
     public List<Folder> getAllByParent(Folder parent) {
         return folderRepository.findAllByParent(parent);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<Folder> getParentFolders(User owner) {
+        return folderRepository.findAllByOwnerAndParentIsNull(owner);
     }
 
     @Override
