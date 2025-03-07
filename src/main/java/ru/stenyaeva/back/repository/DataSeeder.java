@@ -11,12 +11,11 @@ import ru.stenyaeva.back.model.note.Note;
 import ru.stenyaeva.back.model.note.NoteImage;
 import ru.stenyaeva.back.model.user.User;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class UserSeeder implements CommandLineRunner {
+public class DataSeeder implements CommandLineRunner {
     private final UserRepository userRepository;
     private final NoteRepository noteRepository;
     private final FolderRepository folderRepository;

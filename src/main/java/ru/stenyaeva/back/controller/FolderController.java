@@ -38,7 +38,6 @@ public class FolderController {
 
     @PostMapping
     public FolderDto createFolder(@RequestBody CreateFolderDto dto){
-
         Folder folder = new Folder(dto,
                 securityUtils.getUser(),
                 dto.getParent_id() == null ? null : folderService.getById(dto.getParent_id()));

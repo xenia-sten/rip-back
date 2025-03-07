@@ -21,10 +21,10 @@ public class UserRegistrationValidator implements Validator {
     public void validate(Object target, Errors errors) {
         RegistrationUserDto dto = (RegistrationUserDto) target;
         if(!dto.getPassword().equals(dto.getConfirmPassword())){
-            errors.rejectValue("password","","Пароли не совпадают");
+            errors.rejectValue("password","","Пароли не совпадают!");
         }
         if(userRepository.findByEmail(dto.getEmail()).isPresent()){
-            errors.rejectValue("email","","Почта уже занята");
+            errors.rejectValue("email","","Почта уже занята!");
         }
     }
 }

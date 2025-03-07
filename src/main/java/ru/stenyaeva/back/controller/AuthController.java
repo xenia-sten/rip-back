@@ -12,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.stenyaeva.back.config.security.UserAuthentication;
@@ -44,6 +45,11 @@ public class AuthController {
         return Map.of("isAuthenticated",SecurityContextHolder.getContext().getAuthentication() instanceof UserAuthentication);
     }
 
+    @GetMapping("/csrf-token")
+    public CsrfToken csrfToken(HttpServletRequest request) {
+        return (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+    }
+
     @PostMapping("/logout")
     public void logout(HttpSession httpSession, HttpServletRequest httpRequest, HttpServletResponse response){
         try{
@@ -52,13 +58,13 @@ public class AuthController {
             if (cookies != null) {
                 for (Cookie cookie : cookies) {
                     cookie.setValue(null);
-                    cookie.setPath("/"); // Убедитесь, что путь совпадает с тем, где были заданы cookies
+                    cookie.setPath("/");
                     cookie.setMaxAge(0);
                     response.addCookie(cookie);
                 }
             }
         }catch (Exception e){
-            System.err.println("Ошибка при logout");
+            System.err.println("Ошибка при выходе");
         }
     }
 

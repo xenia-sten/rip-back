@@ -33,21 +33,21 @@ public class Folder {
     @ManyToOne
     private User owner;
 
-    @ManyToOne
     @JoinColumn(name = "parent_id")
-    private Folder parent;  // Ссылка на родительскую папку
+    @ManyToOne
+    private Folder parent;
+
+    @OneToMany(fetch = FetchType.LAZY,  cascade = CascadeType.ALL, mappedBy = "parent")
+    private List<Folder> subFolders;
+
+    @OneToMany(fetch = FetchType.LAZY,  cascade = CascadeType.ALL, mappedBy = "folder")
+    private List<Note> notes;
 
     @CreationTimestamp
     private Timestamp createdAt;
 
     @UpdateTimestamp
     private Timestamp updatedAt;
-//    public Folder(FolderDto dto, User owner){
-//        this.id = dto.getId();
-//        this.name = dto.getName();
-//        this.owner = owner;
-//        this.parent = folder dto.getParentId()
-//    }
 
     public Folder (CreateFolderDto dto, User owner, Folder parent){
         this.name = dto.getName();

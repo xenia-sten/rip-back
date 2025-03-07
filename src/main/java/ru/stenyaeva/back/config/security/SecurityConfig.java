@@ -43,7 +43,9 @@ public class SecurityConfig {
                         req -> req
                                 .requestMatchers("/auth/**").permitAll()
                                 .anyRequest().authenticated())
-                .csrf(AbstractHttpConfigurer::disable);
+                .csrf(
+                        csrf -> csrf.disable()
+                );
         return http.build();
     }
 }

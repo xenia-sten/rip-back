@@ -8,11 +8,9 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import ru.stenyaeva.back.domain.dto.note.CreateNoteDto;
-import ru.stenyaeva.back.domain.dto.note.NoteDto;
-import ru.stenyaeva.back.model.user.User;
 
 import java.sql.Timestamp;
-import java.util.Base64;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -42,12 +40,8 @@ public class Note {
     @UpdateTimestamp
     private Timestamp updatedAt;
 
-//    public Note(NoteDto dto, Folder folder){
-//        this.id = dto.getId();
-//        this.title = dto.getTitle();
-//        this.content = dto.getContent() != null ? Base64.getDecoder().decode(dto.getContent()) : new byte[0];
-//        this.folder = folder;
-//    }
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "note")
+    private List<NoteImage> images;
 
 
     public Note(Long id, String title, String content, Folder folder) {

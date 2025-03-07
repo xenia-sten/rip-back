@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.stenyaeva.back.model.note.Folder;
+import ru.stenyaeva.back.model.note.Note;
 import ru.stenyaeva.back.model.user.User;
 import ru.stenyaeva.back.repository.FolderRepository;
+import ru.stenyaeva.back.repository.NoteRepository;
 import ru.stenyaeva.back.service.FolderService;
 
 import java.util.List;
@@ -14,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FolderServiceImpl implements FolderService {
     private final FolderRepository folderRepository;
+    private final NoteRepository noteRepository;
 
     public List<Folder> getAllByOwner (User owner){
         return folderRepository.findAllByOwner(owner);
@@ -47,6 +50,10 @@ public class FolderServiceImpl implements FolderService {
 
     @Override
     public void delete(Long id) {
+        List<Folder> children = folderRepository.findAllByParent(folderRepository.getById(id));
+        for (Folder child : children) {
+            folderRepository.delete(child);
+        }
         folderRepository.deleteById(id);
     }
 }
