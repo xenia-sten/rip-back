@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
@@ -19,8 +20,12 @@ import ru.stenyaeva.back.config.security.UserAuthentication;
 import ru.stenyaeva.back.domain.dto.AuthDto;
 import ru.stenyaeva.back.domain.dto.RegistrationUserDto;
 import ru.stenyaeva.back.domain.exception.ValidationException;
+import ru.stenyaeva.back.domain.utils.VerificationCodeGenerator;
 import ru.stenyaeva.back.model.user.User;
+import ru.stenyaeva.back.model.user.UserVerification;
+import ru.stenyaeva.back.service.EmailService;
 import ru.stenyaeva.back.service.UserService;
+import ru.stenyaeva.back.service.VerificationService;
 import ru.stenyaeva.back.service.impl.UserDetailsServiceImpl;
 import ru.stenyaeva.back.domain.utils.UserRegistrationValidator;
 
@@ -38,6 +43,8 @@ public class AuthController {
     private final UserRegistrationValidator userRegistrationValidator;
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
+    private final VerificationService verificationService;
+    private final EmailService emailService;
 
 
     @GetMapping("/isAuthenticated")
@@ -70,13 +77,30 @@ public class AuthController {
 
     @PostMapping("/register")
     public void registerUser(@Valid @RequestBody RegistrationUserDto dto,
-                                          BindingResult errors, HttpServletRequest request) {
+                                          BindingResult errors) {
         userRegistrationValidator.validate(dto, errors);
         if (errors.hasErrors()) {
             throw new ValidationException(errors.getFieldErrors());
         }
-        userService.save(new User(dto, List.of()));
-        createSession(dto.getEmail(), request,null);
+        String code = VerificationCodeGenerator.generateVerificationCode();
+        UserVerification userVerification = new UserVerification();
+        userVerification.setEmail(dto.getEmail());
+        userVerification.setVerificationCode(code);
+        verificationService.save(userVerification);
+        emailService.sendVerificationEmail(dto.getEmail(), code);
+    }
+
+    @PostMapping("/verify-email")
+    public ResponseEntity<?> verifyEmail(@Valid @RequestBody RegistrationUserDto dto, @RequestParam("code") String code,
+                              HttpServletRequest request, BindingResult errors){
+        Boolean isVerification = verificationService.verifyCode(dto.getEmail(), code);
+        if(isVerification){
+            userService.save(new User(dto, List.of()));
+            createSession(dto.getEmail(), request,null);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body("Неверный код!");
     }
 
     @PostMapping("/login")
@@ -96,8 +120,6 @@ public class AuthController {
         HttpSession session = request.getSession(true);
         session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
     }
-
-
 
 
     @ExceptionHandler

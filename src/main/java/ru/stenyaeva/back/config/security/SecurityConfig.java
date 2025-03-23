@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -29,7 +30,7 @@ public class SecurityConfig {
                 List.of("http://localhost:5173"));
         corsConfig.setAllowCredentials(true);
         corsConfig.setAllowedMethods(List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
-        corsConfig.setAllowedHeaders(List.of("Content-Type","Content-Length", "Authorization","Set-Cookie"));
+        corsConfig.setAllowedHeaders(List.of("Content-Type","Content-Length", "Authorization","Set-Cookie", "X-XSRF-TOKEN"));
         corsConfig.setExposedHeaders(List.of("Content-Length", "Content-Type","Authorization","Set-Cookie"));
         corsConfig.setMaxAge(3600L);
         var urlBasedConfig = new UrlBasedCorsConfigurationSource();
@@ -44,7 +45,10 @@ public class SecurityConfig {
                                 .requestMatchers("/auth/**").permitAll()
                                 .anyRequest().authenticated())
                 .csrf(
-                        csrf -> csrf.disable()
+                        csrf -> csrf
+                                .disable()
+//                                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+//                                .ignoringRequestMatchers("/auth/**")
                 );
         return http.build();
     }

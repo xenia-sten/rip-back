@@ -21,6 +21,7 @@ public class DataSeeder implements CommandLineRunner {
     private final FolderRepository folderRepository;
     private final PasswordEncoder encoder;
     private final NoteImageRepository noteImageRepository;
+    private final UserVerificationRepository userVerificationRepository;
 
     @SneakyThrows
     @Override
@@ -29,6 +30,7 @@ public class DataSeeder implements CommandLineRunner {
         noteRepository.deleteAll();
         folderRepository.deleteAll();
         userRepository.deleteAll();
+        userVerificationRepository.deleteAll();
 
         User egor = userRepository.save(new User(null, "Egor","ekorovin03@gmail.com",encoder.encode("12345678"), List.of()));
         User kseniya = userRepository.save(new User(null, "Kseniya","stenyeva03@gmail.com",encoder.encode("12345678"), List.of()));
